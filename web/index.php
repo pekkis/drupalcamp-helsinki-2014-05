@@ -9,12 +9,31 @@ use Chtrupal\GreeterNeederNeedsMe;
 use Chtrupal\GreeterNeedsMe;
 use Chtrupal\Greeter;
 
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Reference;
+
 $request = Request::createFromGlobals();
 $greeting = $request->query->get('greeting', 'tussikasvo');
 
-$needer1 = new GreeterNeederNeedsMe();
-$needer2 = new GreeterNeedsMe($needer1);
-$greeter = new Greeter($needer2);
+// DI
+
+$container = new ContainerBuilder();
+
+$container
+    ->register('greeter', 'Chtrupal\Greeter')
+    ->addArgument(new Reference('needer2'));
+
+$container
+    ->register('needer1', 'Chtrupal\GreeterNeederNeedsMe');
+
+$container
+    ->register('needer2', 'Chtrupal\GreeterNeedsMe')
+    ->addArgument(new Reference('needer1'));
+
+// Get service from DI
+$greeter = $container->get('greeter');
+
+// Twig
 
 $loader = new Twig_Loader_Filesystem(__DIR__ . '/../views');
 $twig = new Twig_Environment(
