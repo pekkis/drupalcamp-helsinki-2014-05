@@ -8,4 +8,12 @@
         Cthrupal is a content management framework to end all content management frameworks!
     </p>
 
+    <h2>Stuff</h2>
+
+    <ul>
+        {% for key, thing in stuff %}
+        <li>{{ key }} => {{ thing }}</li>
+        {% endfor %}
+    </ul>
+
 {% endblock %}
