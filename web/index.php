@@ -1,10 +1,15 @@
 <?php
 
-$greeting = (isset($_GET['greeting'])) ? $_GET['greeting']: 'tussiposki';
+require_once __DIR__ . '/../vendor/autoload.php';
 
-?>
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
-<html>
+$request = Request::createFromGlobals();
+$greeting = $request->query->get('greeting', 'tussikasvo');
+
+ob_start();
+?><html>
     <head>
         <title>Chtrupal v666</title>
 
@@ -30,5 +35,11 @@ $greeting = (isset($_GET['greeting'])) ? $_GET['greeting']: 'tussiposki';
     </body>
 
 </html>
+<?php
+$body = ob_get_clean();
+
+$response = new Response($body, Response::HTTP_OK);
+$response->prepare($request)->send();
+
 
 

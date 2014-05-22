@@ -1,2 +1,4 @@
 vendor/
 .idea
+php_errors.log
+web/php_errors.log
