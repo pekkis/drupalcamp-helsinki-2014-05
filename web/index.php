@@ -39,7 +39,11 @@ ob_start();
 $body = ob_get_clean();
 
 $response = new Response($body, Response::HTTP_OK);
-$response->prepare($request)->send();
+$response
+    ->prepare($request)
+    ->setPrivate()
+    ->setExpires(new DateTime('1978-03-21'))
+    ->send();
 
 
 
