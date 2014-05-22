@@ -8,35 +8,21 @@ use Symfony\Component\HttpFoundation\Response;
 $request = Request::createFromGlobals();
 $greeting = $request->query->get('greeting', 'tussikasvo');
 
-ob_start();
-?><html>
-    <head>
-        <title>Chtrupal v666</title>
+$loader = new Twig_Loader_Filesystem(__DIR__ . '/../views');
+$twig = new Twig_Environment(
+    $loader,
+    array(
+        'cache' => __DIR__ . '/../cache',
+        'debug' => true
+    )
+);
 
-        <style type="text/css">
-
-            body {
-                font-size: 20px;
-            }
-
-        </style>
-
-
-    </head>
-
-    <body>
-
-        <h1><?php echo "{$greeting}, welcome to Chtrupal v666!"; ?></h1>
-
-        <p>
-            Cthrupal is a content management framework to end all content management frameworks!
-        </p>
-
-    </body>
-
-</html>
-<?php
-$body = ob_get_clean();
+$body = $twig->render(
+    'greeting.html.twig',
+    [
+        'greeting' => $greeting
+    ]
+);
 
 $response = new Response($body, Response::HTTP_OK);
 $response
